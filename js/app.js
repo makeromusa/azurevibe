@@ -9,6 +9,61 @@ import { QuizEngine } from "./engines/quiz-engine.js";
 import { FlashcardEngine } from "./engines/flashcard-engine.js";
 import { BuddyEngine } from "./engines/buddy-engine.js";
 import { PlannerEngine } from "./engines/planner-engine.js";
+import { supabaseService } from "./supabase-client.js";
+
+// Web Audio Vibe Synthesizer (Zero MP3 files, zero latency)
+function playVibeSound(type) {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+
+    if (type === "correct") {
+      // Ascending major chime (C5 -> E5 -> G5)
+      const now = ctx.currentTime;
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        gain.gain.setValueAtTime(0.12, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.22);
+      });
+    } else if (type === "incorrect") {
+      // Soft low error buzz
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(220, now);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.26);
+    } else if (type === "flip") {
+      // Soft tactile click
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, now);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.07);
+    }
+  } catch (e) {
+    // Audio context may be blocked by autoplay policy until gesture
+  }
+}
 
 class AzureVibeApp {
   constructor() {
@@ -130,10 +185,23 @@ class AzureVibeApp {
       });
     }
 
+    // Star / Bookmark Button
+    const starBtn = document.getElementById("btn-star-question");
+    if (starBtn) {
+      starBtn.addEventListener("click", async () => {
+        const q = this.quizEngine.currentQuestion;
+        if (!q) return;
+        const isStarred = await supabaseService.toggleBookmark(q.id);
+        starBtn.textContent = isStarred ? "⭐ Bookmarked" : "☆ Bookmark Question";
+        starBtn.style.color = isStarred ? "#fbbf24" : "var(--text-main)";
+      });
+    }
+
     // Flashcard Flip & Controls
     const cardInner = document.getElementById("flashcard-inner");
     if (cardInner) {
       cardInner.addEventListener("click", () => {
+        playVibeSound("flip");
         const isFlipped = this.flashcardEngine.flip();
         cardInner.classList.toggle("flipped", isFlipped);
       });
@@ -142,6 +210,9 @@ class AzureVibeApp {
     const markMasteredBtn = document.getElementById("btn-card-mastered");
     if (markMasteredBtn) {
       markMasteredBtn.addEventListener("click", () => {
+        playVibeSound("correct");
+        const card = this.flashcardEngine.getCurrentCard();
+        if (card) supabaseService.setFlashcardMastery(card.id, true);
         this.flashcardEngine.markCard(true);
         this.renderFlashcard();
       });
@@ -150,6 +221,9 @@ class AzureVibeApp {
     const markReviewBtn = document.getElementById("btn-card-review");
     if (markReviewBtn) {
       markReviewBtn.addEventListener("click", () => {
+        playVibeSound("incorrect");
+        const card = this.flashcardEngine.getCurrentCard();
+        if (card) supabaseService.setFlashcardMastery(card.id, false);
         this.flashcardEngine.markCard(false);
         this.renderFlashcard();
       });
@@ -309,6 +383,15 @@ class AzureVibeApp {
     const topicEl = document.getElementById("quiz-topic-title");
     if (topicEl) topicEl.textContent = q.topic;
 
+    // Check Starred State
+    const starBtn = document.getElementById("btn-star-question");
+    if (starBtn) {
+      const bookmarks = supabaseService.getBookmarks();
+      const isStarred = bookmarks.includes(q.id);
+      starBtn.textContent = isStarred ? "⭐ Bookmarked" : "☆ Bookmark Question";
+      starBtn.style.color = isStarred ? "#fbbf24" : "var(--text-main)";
+    }
+
     // Scenario & Question
     const scenarioBox = document.getElementById("quiz-scenario");
     if (scenarioBox) scenarioBox.textContent = q.scenario;
@@ -358,6 +441,17 @@ class AzureVibeApp {
   handleQuizSubmission(optionId) {
     const result = this.quizEngine.submitAnswer(optionId);
     if (!result) return;
+
+    // Audio vibe feedback
+    playVibeSound(result.isCorrect ? "correct" : "incorrect");
+
+    // Real Supabase persistence
+    supabaseService.recordQuizAttempt(
+      this.quizEngine.currentQuestion.id,
+      this.quizEngine.currentQuestion.domainId,
+      optionId,
+      result.isCorrect
+    );
 
     // Optional async sync to backend REST API (gracefully degrades offline)
     try {

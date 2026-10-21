@@ -28,6 +28,7 @@
       <li><button class="nav-btn" data-nav="quiz" data-view="quiz">📝 Smart Quiz</button></li>
       <li><button class="nav-btn" data-nav="flashcards" data-view="flashcards">📇 Flashcards</button></li>
       <li><button class="nav-btn" data-nav="buddy" data-view="buddy">🤖 AI Study Buddy</button></li>
+      <li><button class="nav-btn" data-nav="matrix" data-view="matrix">📐 Service Matrix</button></li>
       <li><button class="nav-btn" data-nav="planner" data-view="planner">📅 Study Planner</button></li>
     </ul>
 
@@ -35,6 +36,9 @@
       <div class="readiness-pill" id="nav-readiness-pill" title="Weighted across all 3 official AZ-900 learning paths">
         🎯 Readiness: 0%
       </div>
+      <button class="nav-btn" id="btn-cloud-status" title="Supabase Database Status" style="padding: 0.35rem 0.65rem; font-size: 0.78rem; border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+        ⚡ Supabase Synced
+      </button>
       <button class="theme-toggle" id="theme-toggle-btn" title="Toggle Light/Dark Vibe Mode" aria-label="Toggle Theme">
         ☀️
       </button>
@@ -170,14 +174,20 @@
           <button class="filter-btn quiz-filter-btn" data-filter="2">2. Architecture & Services (37%)</button>
           <button class="filter-btn quiz-filter-btn" data-filter="3">3. Management & Governance (35%)</button>
           <button class="filter-btn quiz-filter-btn" data-filter="weak" style="border-color: var(--error-color);">⚠️ Weak Areas Only</button>
+          <button class="filter-btn quiz-filter-btn" data-filter="starred" style="border-color: #fbbf24; color: #fbbf24;">⭐ Starred Questions</button>
         </div>
       </div>
 
       <!-- Question Active Container -->
       <div id="quiz-interactive-area" class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <span class="badge badge-concepts" id="quiz-domain-badge">Cloud Concepts</span>
-          <span style="font-size: 0.85rem; color: var(--text-dim);" id="quiz-topic-title">Shared Responsibility Model</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="badge badge-concepts" id="quiz-domain-badge">Cloud Concepts</span>
+            <span style="font-size: 0.85rem; color: var(--text-dim);" id="quiz-topic-title">Shared Responsibility Model</span>
+          </div>
+          <button class="btn btn-secondary" id="btn-star-question" style="padding: 0.3rem 0.75rem; font-size: 0.8rem;" title="Bookmark this tricky question for blitz review">
+            ⭐ Bookmark Question
+          </button>
         </div>
 
         <div class="scenario-box" id="quiz-scenario">
@@ -342,6 +352,143 @@
               Trap text...
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 6: SERVICE COMPARISON MATRICES (CHEAT SHEETS)
+         ========================================== -->
+    <section class="view-section" id="view-matrix">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 800;">📐 AZ-900 Core Service Comparison Matrices</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Visual cheat sheets solving the top 4 service pairs candidates confuse on the exam.
+        </p>
+      </div>
+
+      <!-- Matrix 1: Networking -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--azure-blue);">
+          1. Azure ExpressRoute vs. VPN Gateway
+        </h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 0.75rem;">Feature</th>
+                <th style="padding: 0.75rem; color: var(--azure-blue);">Azure ExpressRoute</th>
+                <th style="padding: 0.75rem; color: var(--domain-1);">Site-to-Site VPN Gateway</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600;">Connection Path</td>
+                <td style="padding: 0.75rem;">Private dedicated line (Does NOT traverse public internet)</td>
+                <td style="padding: 0.75rem;">Traverses public internet through encrypted tunnel</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600;">Bandwidth</td>
+                <td style="padding: 0.75rem;">Up to 100 Gbps</td>
+                <td style="padding: 0.75rem;">Typically up to 1.25 Gbps (max 10 Gbps)</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600;">Encryption by Default</td>
+                <td style="padding: 0.75rem;">No (traffic is private, but encryption requires MACsec/IPsec overlay)</td>
+                <td style="padding: 0.75rem;">Yes (IPsec/IKE encrypted tunnel)</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem; font-weight: 600;">Best Use Case</td>
+                <td style="padding: 0.75rem;">Mission-critical enterprise mainframes, petabyte migrations</td>
+                <td style="padding: 0.75rem;">Small/medium branch offices, backup links</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Matrix 2: Governance -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--domain-3);">
+          2. Azure Policy vs. Role-Based Access Control (RBAC)
+        </h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 0.75rem;">Dimension</th>
+                <th style="padding: 0.75rem; color: var(--domain-3);">Azure Policy</th>
+                <th style="padding: 0.75rem; color: #60a5fa;">Role-Based Access Control (RBAC)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600;">Primary Focus</td>
+                <td style="padding: 0.75rem;">WHAT properties/regions/SKUs can be deployed</td>
+                <td style="padding: 0.75rem;">WHO has permissions to take actions on resources</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 600;">Enforcement Point</td>
+                <td style="padding: 0.75rem;">Resource properties & compliance state</td>
+                <td style="padding: 0.75rem;">User, Group, or Service Principal Identity</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem; font-weight: 600;">Typical Exam Question</td>
+                <td style="padding: 0.75rem;">"Ensure all resources are deployed in South Africa North"</td>
+                <td style="padding: 0.75rem;">"Allow Kwame to restart VMs without granting delete permissions"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Matrix 3: Storage Access Tiers -->
+      <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--domain-2);">
+          3. Azure Blob Storage Access Tiers
+        </h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                <th style="padding: 0.75rem;">Tier</th>
+                <th style="padding: 0.75rem;">Storage Cost / GB</th>
+                <th style="padding: 0.75rem;">Access Cost</th>
+                <th style="padding: 0.75rem;">Minimum Retention</th>
+                <th style="padding: 0.75rem;">Retrieval Latency</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 700; color: #ef4444;">Hot Tier</td>
+                <td style="padding: 0.75rem;">Highest</td>
+                <td style="padding: 0.75rem;">Lowest</td>
+                <td style="padding: 0.75rem;">None</td>
+                <td style="padding: 0.75rem;">Milliseconds</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 700; color: #60a5fa;">Cool Tier</td>
+                <td style="padding: 0.75rem;">Lower</td>
+                <td style="padding: 0.75rem;">Higher</td>
+                <td style="padding: 0.75rem;">30 days</td>
+                <td style="padding: 0.75rem;">Milliseconds</td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-subtle);">
+                <td style="padding: 0.75rem; font-weight: 700; color: #3b82f6;">Cold Tier</td>
+                <td style="padding: 0.75rem;">Very Low</td>
+                <td style="padding: 0.75rem;">High</td>
+                <td style="padding: 0.75rem;">90 days</td>
+                <td style="padding: 0.75rem;">Milliseconds</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem; font-weight: 700; color: #9ca3af;">Archive Tier</td>
+                <td style="padding: 0.75rem;">Lowest (Offline)</td>
+                <td style="padding: 0.75rem;">Highest</td>
+                <td style="padding: 0.75rem;">180 days</td>
+                <td style="padding: 0.75rem;">Hours (Must Rehydrate)</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>

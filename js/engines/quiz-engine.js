@@ -26,11 +26,14 @@ export class QuizEngine {
   loadQuestions() {
     let pool = [...QUESTIONS];
 
-    if (this.currentFilter === "weak") {
+    if (this.currentFilter === "starred") {
+      const starredIds = JSON.parse(localStorage.getItem("azurevibe_bookmarks") || "[]");
+      pool = pool.filter(q => starredIds.includes(q.id));
+      if (pool.length === 0) pool = [];
+    } else if (this.currentFilter === "weak") {
       const weakIds = this.readinessEngine.state.weakQuestionIds || [];
       pool = pool.filter(q => weakIds.includes(q.id));
       if (pool.length === 0) {
-        // If no weak questions, fallback to all questions
         pool = [...QUESTIONS];
       }
     } else if (["1", "2", "3", 1, 2, 3].includes(this.currentFilter)) {
