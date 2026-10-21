@@ -61,6 +61,65 @@ $$\text{Scaled Score} = \text{Readiness Score} \times 10$$
 
 ---
 
+## 🗄️ Production Cloud Backend & Supabase Architecture
+
+AzureVibe includes a complete production **PostgreSQL database schema** ready for **Supabase**, featuring Row Level Security (RLS) and stored analytical procedures:
+
+```mermaid
+erDiagram
+    DOMAINS ||--o{ QUESTIONS : contains
+    DOMAINS ||--o{ FLASHCARDS : contains
+    DOMAINS ||--o{ CONCEPT_ANALOGIES : contains
+    QUESTIONS ||--|{ QUESTION_OPTIONS : has
+    QUESTIONS ||--o{ QUIZ_ATTEMPTS : records
+    QUESTIONS ||--o{ USER_BOOKMARKS : stars
+    FLASHCARDS ||--o{ USER_FLASHCARD_PROGRESS : tracks
+
+    DOMAINS {
+        int id PK
+        string name
+        numeric weight
+        string color
+    }
+    QUESTIONS {
+        string id PK
+        int domain_id FK
+        string topic
+        string difficulty
+        text scenario
+        text question
+    }
+    QUESTION_OPTIONS {
+        uuid id PK
+        string question_id FK
+        string option_letter
+        text option_text
+        boolean is_correct
+        text explanation
+    }
+    QUIZ_ATTEMPTS {
+        uuid id PK
+        uuid user_id
+        string question_id FK
+        boolean is_correct
+        timestamp created_at
+    }
+    USER_BOOKMARKS {
+        uuid user_id PK
+        string question_id PK
+        text notes
+    }
+```
+
+### ⚡ 60-Second Supabase Setup
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Open the **SQL Editor** in your Supabase Dashboard.
+3. Copy and run the migration script: [`supabase/schema.sql`](file:///C:/Users/HomePC/.gemini/antigravity/scratch/azurevibe/supabase/schema.sql).
+4. Run the seed script: [`supabase/seed.sql`](file:///C:/Users/HomePC/.gemini/antigravity/scratch/azurevibe/supabase/seed.sql).
+5. Copy your Project URL & Anon Key into `.env` (or set them in your deployment platform).
+
+---
+
 ## 🛠️ Architecture & Tech Stack
 
 Built following strict clean architecture principles:
