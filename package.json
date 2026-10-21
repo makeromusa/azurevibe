@@ -1,0 +1,26 @@
+{
+  "name": "azurevibe",
+  "version": "1.0.0",
+  "description": "Intelligent AZ-900 Exam Prep Suite for the #1MillionDevs Vibe Coding Hackathon",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/api.test.js"
+  },
+  "keywords": [
+    "azure",
+    "az-900",
+    "exam-prep",
+    "vibe-coding",
+    "power-learn-project",
+    "1milliondevs"
+  ],
+  "author": "Musa & Team (#1MillionDevs)",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

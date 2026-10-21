@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AzureVibe — Intelligent AZ-900 Exam Prep Suite</title>
+  <meta name="description" content="AI-powered unofficial AZ-900 exam preparation tool built for the 1 Million Devs Vibe Coding Hackathon by Power Learn Project Africa." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <a href="#" class="brand" data-nav="dashboard">
+      <div class="brand-icon">AV</div>
+      <div>
+        <div class="brand-title">AzureVibe</div>
+        <div class="brand-subtitle">AZ-900 Exam Prep Suite</div>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><button class="nav-btn active" data-nav="dashboard" data-view="dashboard">📊 Dashboard</button></li>
+      <li><button class="nav-btn" data-nav="quiz" data-view="quiz">📝 Smart Quiz</button></li>
+      <li><button class="nav-btn" data-nav="flashcards" data-view="flashcards">📇 Flashcards</button></li>
+      <li><button class="nav-btn" data-nav="buddy" data-view="buddy">🤖 AI Study Buddy</button></li>
+      <li><button class="nav-btn" data-nav="planner" data-view="planner">📅 Study Planner</button></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="readiness-pill" id="nav-readiness-pill" title="Weighted across all 3 official AZ-900 learning paths">
+        🎯 Readiness: 0%
+      </div>
+      <button class="theme-toggle" id="theme-toggle-btn" title="Toggle Light/Dark Vibe Mode" aria-label="Toggle Theme">
+        ☀️
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- ==========================================
+         VIEW 1: DASHBOARD & READINESS SPEEDOMETER
+         ========================================== -->
+    <section class="view-section active-view" id="view-dashboard">
+      <div class="hero-card">
+        <div class="hero-text">
+          <div class="hero-badge-tag">⚡ 1 Million Devs Hackathon Edition</div>
+          <h1>Building Smarter Azure Prep from Our Own Journey</h1>
+          <p>
+            Master the 3 Microsoft AZ-900 learning paths with instant diagnostic feedback, spaced-repetition flashcards, and localized analogies built by learners, for learners.
+          </p>
+          <div style="margin-top: 1.25rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" data-nav="quiz">🚀 Start Smart Quiz</button>
+            <button class="btn btn-secondary" data-nav="flashcards">📇 Drill Flashcards</button>
+            <button class="btn btn-secondary" data-nav="buddy">🤖 Explore Analogies</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Readiness Speedometer & Metrics Grid -->
+      <div class="grid-2">
+        <!-- Speedometer Gauge Card -->
+        <div class="card gauge-container">
+          <div class="card-header" style="width: 100%;">
+            <span class="card-title">Overall Exam Readiness</span>
+            <span class="badge" style="background: rgba(0, 120, 212, 0.2); color: #60a5fa;">Weighted 3-Domain Model</span>
+          </div>
+
+          <!-- SVG Half-Donut Speedometer Arc -->
+          <svg class="gauge-svg" viewBox="0 0 200 120">
+            <!-- Background Arc: Radius 80, Path from 20,100 to 180,100 -->
+            <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" />
+            <!-- Animated Dynamic Progress Arc -->
+            <path class="gauge-progress" id="gauge-progress-circle" d="M 20 100 A 80 80 0 0 1 180 100" />
+          </svg>
+
+          <div class="gauge-score" id="dash-gauge-score">0%</div>
+          <div class="gauge-scale" id="dash-gauge-scaled">Scaled: 0 / 1000 (Pass: 700)</div>
+          <div class="gauge-status" id="dash-gauge-status">Just Starting</div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; max-width: 420px;" id="dash-gauge-advice">
+            Start answering questions and reviewing cards to compute your readiness gauge.
+          </p>
+        </div>
+
+        <!-- 3 AZ-900 Official Learning Path Health -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Official Domain Breakdown</span>
+            <button class="btn btn-secondary" id="btn-reset-metrics" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Reset Data</button>
+          </div>
+
+          <!-- Domain 1 -->
+          <div class="domain-health-item">
+            <div class="domain-health-header">
+              <span>Path 1: Cloud Concepts (28% weight)</span>
+              <span id="dash-domain-score-1">0% (0/0)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-d1" id="dash-domain-fill-1" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Domain 2 -->
+          <div class="domain-health-item">
+            <div class="domain-health-header">
+              <span>Path 2: Architecture & Services (37% weight)</span>
+              <span id="dash-domain-score-2">0% (0/0)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-d2" id="dash-domain-fill-2" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Domain 3 -->
+          <div class="domain-health-item">
+            <div class="domain-health-header">
+              <span>Path 3: Management & Governance (35% weight)</span>
+              <span id="dash-domain-score-3">0% (0/0)</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-d3" id="dash-domain-fill-3" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem; display: flex; justify-content: space-around; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="dash-total-answered">0</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">Questions Answered</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--error-color);" id="dash-weak-count">0</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">Weak Questions</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--domain-2);" id="dash-cards-mastered">0</div>
+              <div style="font-size: 0.75rem; color: var(--text-dim);">Cards Mastered</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: SMART QUIZ ARENA
+         ========================================== -->
+    <section class="view-section" id="view-quiz">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="quiz-header">
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800;">📝 Smart Quiz Arena</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Instant feedback with architectural justifications for every single choice.
+            </p>
+          </div>
+          <div id="quiz-counter" style="font-size: 0.9rem; font-weight: 700; color: var(--azure-blue);">
+            Question 1 of 12
+          </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="filter-btn quiz-filter-btn active" data-filter="all">All Domains (Comprehensive)</button>
+          <button class="filter-btn quiz-filter-btn" data-filter="1">1. Cloud Concepts (28%)</button>
+          <button class="filter-btn quiz-filter-btn" data-filter="2">2. Architecture & Services (37%)</button>
+          <button class="filter-btn quiz-filter-btn" data-filter="3">3. Management & Governance (35%)</button>
+          <button class="filter-btn quiz-filter-btn" data-filter="weak" style="border-color: var(--error-color);">⚠️ Weak Areas Only</button>
+        </div>
+      </div>
+
+      <!-- Question Active Container -->
+      <div id="quiz-interactive-area" class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <span class="badge badge-concepts" id="quiz-domain-badge">Cloud Concepts</span>
+          <span style="font-size: 0.85rem; color: var(--text-dim);" id="quiz-topic-title">Shared Responsibility Model</span>
+        </div>
+
+        <div class="scenario-box" id="quiz-scenario">
+          Scenario loading...
+        </div>
+
+        <div class="question-text" id="quiz-question-text">
+          Question loading...
+        </div>
+
+        <div class="options-grid" id="quiz-options-container">
+          <!-- Dynamic Options Injected Here -->
+        </div>
+
+        <!-- Hidden Diagnostic Explanation Panel -->
+        <div class="explanation-panel" id="quiz-explanation-panel">
+          <div class="explanation-title" id="explanation-result-title">
+            Diagnostic Breakdown
+          </div>
+
+          <div class="concept-tip-box">
+            <strong>💡 Azure Concept Tip:</strong> <span id="explanation-concept-tip"></span>
+          </div>
+
+          <div class="explanation-content" id="explanation-body-text">
+            <!-- Distractor Explanations Injected Here -->
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.75rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+            📖 <strong>Official Reference:</strong> <span id="explanation-learn-ref">Microsoft Learn: AZ-900</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+          <button class="btn btn-primary" id="btn-next-question" style="display: none;">
+            Next Question ➔
+          </button>
+        </div>
+      </div>
+
+      <div id="quiz-empty-state" class="card" style="display: none; text-align: center; padding: 3rem 1.5rem;">
+        <h3>No questions in this filter</h3>
+        <p style="color: var(--text-muted); margin: 0.75rem 0;">You've mastered all weak questions or no questions match this category.</p>
+        <button class="btn btn-primary" data-nav="quiz" onclick="document.querySelector('.quiz-filter-btn[data-filter=\'all\']').click();">Reset Filter to All</button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: 3D FLASHCARD STUDIO
+         ========================================== -->
+    <section class="view-section" id="view-flashcards">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="quiz-header">
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800;">📇 Flashcard Coach</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Active recall & spaced repetition. Click any card to flip between front and back.
+            </p>
+          </div>
+          <div id="fc-mastery-text" style="font-size: 0.9rem; font-weight: 700; color: var(--domain-2);">
+            Mastered: 0 / 11 (0%)
+          </div>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-btn fc-filter-btn active" data-filter="all">All Flashcards</button>
+          <button class="filter-btn fc-filter-btn" data-filter="1">1. Cloud Concepts</button>
+          <button class="filter-btn fc-filter-btn" data-filter="2">2. Architecture & Services</button>
+          <button class="filter-btn fc-filter-btn" data-filter="3">3. Management & Governance</button>
+          <button class="filter-btn fc-filter-btn" data-filter="review">🔄 Review Queue Only</button>
+        </div>
+      </div>
+
+      <!-- 3D Card Structure -->
+      <div class="flashcard-wrapper">
+        <div class="flashcard-inner" id="flashcard-inner">
+          <!-- Card Front -->
+          <div class="flashcard-face flashcard-front">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="badge badge-concepts" id="fc-front-category">Cloud Concepts</span>
+              <span style="font-size: 0.85rem; color: var(--text-dim);" id="fc-counter">Card 1 of 11</span>
+            </div>
+            <div class="flashcard-term" id="fc-front-term">
+              Shared Responsibility Model
+            </div>
+            <div class="flashcard-hint">
+              👆 Click to flip and reveal definition & real-world analogy
+            </div>
+          </div>
+
+          <!-- Card Back -->
+          <div class="flashcard-face flashcard-back">
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;" id="fc-back-term">
+              Shared Responsibility Model
+            </div>
+            <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="fc-back-definition">
+              Definition loading...
+            </div>
+            <div class="flashcard-analogy-box">
+              <strong>🌍 Real-World Analogy:</strong> <span id="fc-back-analogy"></span>
+            </div>
+            <div class="flashcard-trap-box">
+              <strong>⚠️ Exam Trap:</strong> <span id="fc-back-trap"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Action Buttons -->
+      <div class="flashcard-controls">
+        <button class="btn btn-secondary" id="btn-card-prev" title="Previous Card">◀ Previous</button>
+        <button class="btn btn-danger" id="btn-card-review">❌ Still Confused (Needs Review)</button>
+        <button class="btn btn-success" id="btn-card-mastered">✅ Nailed It (Mastered)</button>
+        <button class="btn btn-secondary" id="btn-card-next" title="Next Card">Next ▶</button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: AI STUDY BUDDY (ANALOGIES)
+         ========================================== -->
+    <section class="view-section" id="view-buddy">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 800;">🤖 AI Study Buddy: Localized Concept Explainer</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Explaining abstract cloud concepts with tangible, real-world African analogies and exam trap insights.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Sidebar Concept Selector -->
+        <div>
+          <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-muted);">
+            SELECT CORE AZURE CONCEPT:
+          </div>
+          <div class="buddy-sidebar-list" id="buddy-concept-list">
+            <!-- Concepts Injected Dynamically -->
+          </div>
+        </div>
+
+        <!-- Detailed Analogy Card -->
+        <div class="analogy-card">
+          <div class="badge badge-architecture" id="buddy-detail-domain" style="margin-bottom: 0.75rem;">
+            Describe Azure Architecture and Services
+          </div>
+          <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.75rem;" id="buddy-detail-title">
+            Concept Title
+          </h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;" id="buddy-detail-simple">
+            Explanation...
+          </p>
+
+          <div class="analogy-african-highlight">
+            <strong style="color: var(--domain-2); font-size: 1rem;">🌍 Real-World Analogy:</strong>
+            <div id="buddy-detail-african" style="margin-top: 0.5rem;">
+              Analogy text...
+            </div>
+          </div>
+
+          <div class="concept-tip-box" style="background: rgba(245, 158, 11, 0.12); border-color: var(--domain-3);">
+            <strong style="color: #fbbf24;">🎯 How Microsoft Tests This on the Exam:</strong>
+            <p id="buddy-detail-trap" style="margin-top: 0.4rem; color: var(--text-main);">
+              Trap text...
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 5: PERSONAL STUDY PLANNER
+         ========================================== -->
+    <section class="view-section" id="view-planner">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 800;">📅 Personal Study Planner</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Calculate a dynamic day-by-day study roadmap based on your target test date and daily available hours.
+        </p>
+      </div>
+
+      <!-- Planner Config Form -->
+      <form class="planner-input-bar" id="planner-form">
+        <div class="form-group">
+          <label for="planner-date">Target Exam Date:</label>
+          <input type="date" id="planner-date" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+          <label for="planner-minutes">Daily Study Budget:</label>
+          <select id="planner-minutes" class="form-control">
+            <option value="20">20 minutes / day (Bite-sized)</option>
+            <option value="30" selected>30 minutes / day (Standard)</option>
+            <option value="60">60 minutes / day (Intensive Sprint)</option>
+            <option value="90">90 minutes / day (Immersion)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="height: 42px;">
+          ✨ Generate Adaptive Roadmap
+        </button>
+      </form>
+
+      <!-- Countdown Banner -->
+      <div class="hero-badge-tag" id="planner-countdown-banner" style="font-size: 0.95rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+        🎯 Calculating roadmap...
+      </div>
+
+      <!-- Roadmap Timeline List -->
+      <div class="plan-timeline" id="planner-timeline-container">
+        <!-- Dynamic Timeline Cards Injected Here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- App Footer & Compliance Notice -->
+  <footer class="app-footer">
+    <div class="disclaimer-badge">
+      ⚠️ Unofficial Exam Preparation Tool
+    </div>
+    <p>
+      <strong>AzureVibe</strong> is an independent community project developed for the <strong>#1MillionDevs Movement</strong> — <em>Power Learn Project Africa</em>.
+    </p>
+    <p style="font-size: 0.78rem;">
+      Not affiliated with, endorsed by, or sponsored by Microsoft Corporation. All practice questions and analogies are independently created based on Microsoft Learn's public AZ-900 skills outline.
+    </p>
+  </footer>
+
+  <!-- Application Entry Script (ES6 Modules) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
