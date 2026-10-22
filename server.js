@@ -293,12 +293,17 @@ app.post("/api/v1/reset", (req, res) => {
   res.json({ success: true, message: "Progress reset successfully" });
 });
 
-// Serve frontend static assets
+// Serve frontend static assets (prefer public directory)
+const publicDir = path.join(__dirname, "public");
+app.use(express.static(publicDir));
 app.use(express.static(__dirname));
 
 // Fallback all other GET requests to index.html (SPA routing)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).json({ error: "API endpoint not found" });
+  }
+  res.sendFile(path.join(publicDir, "index.html"));
 });
 
 // Start listening only when executed directly (not when imported in tests)
