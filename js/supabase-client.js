@@ -25,14 +25,30 @@ class SupabaseService {
 
   async initClient() {
     // Check if Supabase keys are in global window config or environment
-    const url = window.__SUPABASE_URL__ || localStorage.getItem("azurevibe_supabase_url");
-    const key = window.__SUPABASE_ANON_KEY__ || localStorage.getItem("azurevibe_supabase_key");
+    const url = window.__SUPABASE_URL__ || localStorage.getItem("azurevibe_supabase_url") || "https://ctwazhgsnvneinuhjdbk.supabase.co";
+    const key = window.__SUPABASE_ANON_KEY__ || localStorage.getItem("azurevibe_supabase_key") || "sb_publishable_uPN4KWM97TKv3GX0c340FQ_gYVv3bSM";
 
     if (url && key && window.supabase) {
       try {
         this.supabase = window.supabase.createClient(url, key);
         this.isConfigured = true;
         console.log("⚡ Supabase connected live to:", url);
+
+        // Update UI pill if present
+        const updatePill = () => {
+          const pill = document.getElementById("btn-cloud-status");
+          if (pill) {
+            pill.innerHTML = "🟢 Supabase: Live (London)";
+            pill.style.borderColor = "rgba(16, 185, 129, 0.6)";
+            pill.style.color = "#34d399";
+          }
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", updatePill);
+        } else {
+          updatePill();
+        }
       } catch (err) {
         console.warn("Supabase init error, operating in resilient offline mode:", err);
       }
