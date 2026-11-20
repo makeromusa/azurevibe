@@ -114,8 +114,8 @@ erDiagram
 ### ⚡ 60-Second Supabase Setup
 1. Create a free project at [supabase.com](https://supabase.com).
 2. Open the **SQL Editor** in your Supabase Dashboard.
-3. Copy and run the migration script: [`supabase/schema.sql`](file:///C:/Users/HomePC/.gemini/antigravity/scratch/azurevibe/supabase/schema.sql).
-4. Run the seed script: [`supabase/seed.sql`](file:///C:/Users/HomePC/.gemini/antigravity/scratch/azurevibe/supabase/seed.sql).
+3. Copy and run the migration script: `supabase/schema.sql`
+4. Run the seed script: `supabase/seed.sql`
 5. Copy your Project URL & Anon Key into `.env` (or set them in your deployment platform).
 
 ---
@@ -154,7 +154,7 @@ Because AzureVibe is built with zero external dependency bloat, you can run it i
 
 1. Clone or navigate to the repository directory:
    ```bash
-   cd C:\Users\HomePC\.gemini\antigravity\scratch\azurevibe
+   cd azurevibe
    ```
 2. Open with any standard HTTP server (or VS Code Live Server):
    ```bash
